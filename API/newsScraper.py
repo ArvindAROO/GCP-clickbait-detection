@@ -14,3 +14,6 @@ def getSummary(url:str = '') -> list:
     return title, text
 if __name__ == "__main__":
     getSummary("https://bbs.archlinux.org/viewtopic.php?id=260589")
+
+
+    
