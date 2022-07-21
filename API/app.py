@@ -12,13 +12,14 @@ app = Flask(__name__)
 def main():
     try:
         url = request.args.get('query') #the url to be checked
+        # print(url)
         
         title, text = getSummary(url) #get the relevant info from the article
         # KeywordsSimilarity, articlePercentSimilarity, nlpPercentSimilarity = findSimPercentage(title, keywords, articleSummary, nlpSummary) #find the similarity
         
         # finalSummaryPercentage = (articlePercentSimilarity + nlpPercentSimilarity) / 2 # average of two types
         
-
+        # print(title)
         
 
         final_wrapper_res = final_wrapper(title, text)
@@ -28,14 +29,14 @@ def main():
 
         category_res = final_wrapper_res["categories_sim"]
 
-        similarityArray = [final_res, model_res, category_res]
-
+        similarityArray = [final_res * 100, model_res * 100, category_res * 100]
+        print(similarityArray)
         
-        if all( similarityArray[i] < 50 for i in range(len(similarityArray))) or model_res < 9.99:
+        if all( similarityArray[i] < 50 for i in range(len(similarityArray))) or similarityArray[1] < 9.99:
             verdict = "<br>The chances of this being a clickbait are high"
         else:
             verdict = "<br>The chances of this being a clickbait are low."
-        similarityArray = [str(i)+ "%" for i in similarityArray]
+        similarityArray = [str(i)[:5]+ "%" for i in similarityArray]
         similarityArray[0] = "Final: " + similarityArray[0]
         similarityArray[1] = "Model Based: " + similarityArray[1]
         similarityArray[2] = "Category Based: " + similarityArray[2]

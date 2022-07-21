@@ -185,15 +185,15 @@ def compare_text(title, body):
         "body" : categories2
     }
 
-def call_model(title, body):
+def call_model(title):
 
     project = "809048320619"
     location = "us-central1"
     endpoint = "1373659458999156736"
 
-    predict_text_classification_single_label_sample(project, location, endpoint, title)
+    res = predict_text_classification_single_label_sample(project, location, endpoint, title)
 
-    return {"sim" : 0.5}
+    return {"sim" : res}
 
 
 def predict_text_classification_single_label_sample(
@@ -204,22 +204,33 @@ def predict_text_classification_single_label_sample(
     endpoint = aiplatform.Endpoint(endpoint)
 
     response = endpoint.predict(instances=[{"content": content}], parameters={})
+    pred = response.predictions
+    # print(response.predictions)
+    # for prediction_ in response.predictions:
+    #     print(prediction_)
 
-    for prediction_ in response.predictions:
-        print(prediction_)
+    return 1 - pred[0]['confidences'][pred[0]['displayNames'].index('click_bait')]
+    
+
 
         
 
 
 def final_wrapper(title, body):
     res = compare_text(title, body)
-    res_from_ai_model = call_model(title, body)
+    print(res)
+    try:
+        res_from_ai_model = call_model(title)
+        print(res_from_ai_model)
+    except Exception as E:
+        print(E)
 
     final_res = {
         "sim" : 0.6 * res["sim"] + 0.4 * res_from_ai_model["sim"],
         "categories_sim" : res["sim"],
         "model_sim" : res_from_ai_model["sim"] 
     }
+    print(final_res)
     return final_res
 
 if __name__ == "__main__":
@@ -229,10 +240,14 @@ if __name__ == "__main__":
     # helper("categories.json")
     from configs import eg_title, eg_body
     res = compare_text(eg_title, eg_body)
-    res_from_ai_model = call_model(eg_title, eg_body)
-
-    final_res = 0.6 * res["sim"] + 0.4 * res_from_ai_model["sim"]
+    res_from_ai_model = call_model(eg_title)
+    final_res = {
+        "sim" : 0.6 * res["sim"] + 0.4 * res_from_ai_model["sim"],
+        "categories_sim" : res["sim"],
+        "model_sim" : res_from_ai_model["sim"] 
+    }
+    print(final_res)
     # print(json.dumps(res, indent=4))
     # print(json.dumps(res_from_ai_model, indent=4))
 
-    print(final_res)
+    # print(final_res)
