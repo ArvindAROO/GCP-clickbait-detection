@@ -7,9 +7,12 @@ def getSummary(url:str = '') -> list:
 
     title = article.title
 
+    
+
     keywords = article.keywords
 
     text = article.text
+    # print(title)
 
     return title, text
 if __name__ == "__main__":

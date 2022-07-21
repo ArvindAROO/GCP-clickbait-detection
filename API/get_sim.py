@@ -6,10 +6,14 @@ import os
 from google.cloud import language_v1
 from google.cloud import language
 from google.cloud.language_v1 import types
+from google.cloud import aiplatform
 import numpy
 
 # import numpy
 import six
+
+import os
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="key.json"
 
 
 def classify(text):
@@ -181,12 +185,35 @@ def compare_text(title, body):
         "body" : categories2
     }
 
-def call_that_func(title, body):
+def call_model(title, body):
+
+    project = "809048320619"
+    location = "us-central1"
+    endpoint = "1373659458999156736"
+
+    predict_text_classification_single_label_sample(project, location, endpoint, title)
+
     return {"sim" : 0.5}
+
+
+def predict_text_classification_single_label_sample(
+    project, location, endpoint, content
+):
+    aiplatform.init(project=project, location=location)
+
+    endpoint = aiplatform.Endpoint(endpoint)
+
+    response = endpoint.predict(instances=[{"content": content}], parameters={})
+
+    for prediction_ in response.predictions:
+        print(prediction_)
+
+        
+
 
 def final_wrapper(title, body):
     res = compare_text(title, body)
-    res_from_ai_model = call_that_func(title, body)
+    res_from_ai_model = call_model(title, body)
 
     final_res = {
         "sim" : 0.6 * res["sim"] + 0.4 * res_from_ai_model["sim"],
@@ -202,7 +229,7 @@ if __name__ == "__main__":
     # helper("categories.json")
     from configs import eg_title, eg_body
     res = compare_text(eg_title, eg_body)
-    res_from_ai_model = call_that_func(eg_title, eg_body)
+    res_from_ai_model = call_model(eg_title, eg_body)
 
     final_res = 0.6 * res["sim"] + 0.4 * res_from_ai_model["sim"]
     # print(json.dumps(res, indent=4))
