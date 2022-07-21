@@ -173,11 +173,19 @@ def helper(index_file):
 
 def compare_text(title, body):
     copy = title
-    while len(copy.split()) < 20:
-        copy += copy
+    while (len(copy.split()) < 20):
+        copy += " "+copy
     title = copy
+    
+    # print("title: ", title)
+    # print("body: ", body)
+
     categories1 = classify(title)
     categories2 = classify(body)
+    
+    # print("category1: ", categories1)
+    # print("category2: ", categories2)
+
     sim = similarity(categories1, categories2)
     return {
         "sim" : sim, 
@@ -218,16 +226,26 @@ def predict_text_classification_single_label_sample(
 
 def final_wrapper(title, body):
     res = compare_text(title, body)
+    categories = {"title" : [], "body" : []}
+
     print(res)
     try:
         res_from_ai_model = call_model(title)
         print(res_from_ai_model)
+        
+        if(bool(res["title"])):
+            categories["title"] = list(map(lambda x: x.split('/')[-1], [*res["title"]]))
+        if(bool(res["body"])):
+            categories["body"] = list(map(lambda x: x.split('/')[-1], [*res["body"]]))
+
+
     except Exception as E:
         print(E)
 
     final_res = {
         "sim" : 0.6 * res["sim"] + 0.4 * res_from_ai_model["sim"],
         "categories_sim" : res["sim"],
+        "categories" : categories,
         "model_sim" : res_from_ai_model["sim"] 
     }
     print(final_res)

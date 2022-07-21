@@ -12,7 +12,7 @@ function callAPI() {
                     document.getElementById('result').innerHTML = result;
                     var temp = document.getElementById("body").clientHeight;
                     if(temp < 300)
-                        document.body.style.height = temp + 150 + 'px';
+                        document.body.style.height = temp + 280 + 'px';
                 }
             }
         };

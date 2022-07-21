@@ -27,7 +27,15 @@ def main():
 
         model_res = final_wrapper_res["model_sim"]
 
+        title_category = final_wrapper_res["categories"]["title"]
+
+        body_category = final_wrapper_res["categories"]["body"]
+
         category_res = final_wrapper_res["categories_sim"]
+
+        # print('title_category + body_category')
+        # print(title_category)
+        # print(body_category)
 
         similarityArray = [final_res * 100, model_res * 100, category_res * 100]
         print(similarityArray)
@@ -36,15 +44,15 @@ def main():
             verdict = "<br>The chances of this being a clickbait are high"
         else:
             verdict = "<br>The chances of this being a clickbait are low."
-        similarityArray = [str(i)[:5]+ "%" for i in similarityArray]
+        similarityArray = [str(round(i, 3))+ "%" for i in similarityArray]
         similarityArray[0] = "Final: " + similarityArray[0]
         similarityArray[1] = "Model Based: " + similarityArray[1]
         similarityArray[2] = "Category Based: " + similarityArray[2]
 
-        return "<h3>Similarities-</h3>" + '<br>'.join(similarityArray) + verdict 
+        return "<h3>Categories</h3><b>Title</b> - " + ', '.join(title_category) + "<br><b>Body</b> - " + ', '.join(body_category) + "<h3>Similarities-</h3>" + '<br>'.join(similarityArray) + verdict 
     except Exception as E:
         print(E)
-        return "Summary not available for the current url"
+        return "Summary not available for the current URL"
 
 if __name__ == "__main__":
     app.run(host='localhost', port=5000, debug=True)
