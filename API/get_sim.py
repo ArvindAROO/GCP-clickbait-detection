@@ -243,7 +243,7 @@ def final_wrapper(title, body):
         print(E)
 
     final_res = {
-        "sim" : 0.6 * res["sim"] + 0.4 * res_from_ai_model["sim"],
+        "sim" : 0.4 * res["sim"] + 0.6 * res_from_ai_model["sim"],
         "categories_sim" : res["sim"],
         "categories" : categories,
         "model_sim" : res_from_ai_model["sim"] 
