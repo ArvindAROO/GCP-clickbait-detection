@@ -1,6 +1,6 @@
 # AI/ML tools in GCP
 
-### Team Members:
+### Team Members -
 - Anurag Khanra - PES1UG19CS072
 - Arvind Krishna - PES1UG19CS090
 
