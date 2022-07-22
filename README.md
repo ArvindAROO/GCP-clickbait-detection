@@ -45,7 +45,7 @@ Eg: ![](images/df_head.png)
 
 
 ### Example Images
-A non clickbait article                                       vs                                                   A clickbait article
+A non clickbait article                                       vs                                                   A clickbait article<br>
 ![](images/clickbaitnt.png) ![](images/clickbait.png)
 
 
